@@ -1,0 +1,95 @@
+// exports.arrangeByAge = async (req, res) => {
+//     let Query;
+//     if (req.query.sort) {
+//         console.log(typeof req.query.sort);
+//         // const query =  await User.find().sort(req.query.sort).skip(2).limit(2);
+//         Query = await User.find().sort(req.query.sort);
+//         console.log(Query);
+//     }
+
+//     if (req.query.fields) {
+//         let details = req.query.fields.split(',').join(" ");
+//         Query = await User.find().select(details);
+//         console.log(Query);
+//         console.log(details);
+//     }
+
+//     res.status(200).json({ "message": "User List is Sorted in the Descending order!", data: Query })
+// }
+
+
+//Use PUT when you want to ensure the resource is fully replaced or created.
+//Use PATCH when efficiency matters and you only need to update specific fields.
+
+//Full replacement: Unlike updateOne, this replaces the entire document (except _id).
+
+//{ new: true } → Returns the updated document instead of the old one.
+//{ runValidators: true } → Ensures schema validation runs on the update.
+
+
+// Multer ====================>
+// configuration ==========>
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads');
+  },
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+});
+
+const upload = multer({ storage: storage })
+
+const uploadsingleMiddleware = upload.single("foodImage")
+const uploadmultipleMiddleware = upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }])
+
+
+app.post("/upload/:id", uploadsingleMiddleware,async (req, res) => {
+  console.log(req.file);
+  console.log(req.file.path);
+  let newItem = await Menu.findOneAndUpdate({_id:req.params.id},{$set:{foodImage:req.file.filename}},{new:true,runValidators:true});
+  return res.status(200).json({ message: "Image upload Successfully...",data:newItem });
+})
+
+app.post("/users/uploadMultiple", uploadmultipleMiddleware, (req, res) => {
+  console.log(req.file);
+  return res.status(200).json({ message: "Image upload Successfully..." })
+})
+
+// Download by filename
+app.get('/download/:filename', (req, res) => {
+  const filePath = path.join(__dirname, 'uploads', req.params.filename);
+  // console.log(filePath);
+  res.download(filePath, (err) => {
+    if (err) {
+      res.status(404).send('File not found');
+    }
+  });
+});
+
+// Route to VIEW file in browser 
+app.get('/view/:id', async(req, res) => {
+  console.log(req.params.id);
+  let item = await Menu.findById(req.params.id);
+  const filePath = path.join(__dirname, 'uploads', item.foodImage);
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      res.status(404).send('File not found');
+    }
+  });
+});
+
+// app.all('*',(req,res)=>{
+//     console.log(req);
+// })
+app.use(errorHandler);
+
+app.listen(process.env.PORT, () => {
+  console.log("Server is listening at 8000 ")
+});
+
+
+
+// destination --------------->
+//req =======> original Request Object
+//file =========> File we want upload
+//cb =========> Run this callback after the upload
+//cb(custom_Error, path of the folder where we want to store the file)
