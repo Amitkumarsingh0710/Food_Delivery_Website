@@ -26,8 +26,6 @@ function generateRefreshToken(user){
 
 async function verifyUser(token,secret){
    let decode = jwt.verify(token,secret);
-   console.log("Verify");
-   console.log(decode);
    return decode;
 }
 

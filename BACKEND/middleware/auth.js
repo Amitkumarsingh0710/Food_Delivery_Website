@@ -6,8 +6,10 @@ require('dotenv').config();
 
 async function checkAuth(req, res, next) {
     let token = req.cookies.token;
+    console.log("Token ............");
+    console.log(token);
     if (!token) {
-        return res.status(403).json({ status:"Fail",message: "Token expired!" })
+        return res.status(401).json({ status:"Fail",message: "Token expired!" })
     }
     else {
         let decoded = await verifyUser(token, process.env.ACCESS_TOKEN_SECRET);

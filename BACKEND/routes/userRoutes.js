@@ -9,10 +9,4 @@ router.get("/profile/:id",checkAuth, userController.getUserById)
 
 router.patch("/edit/:id",checkAuth, userController.editSpecificDetails);
 
-
-// router.put("/:id",checkAuth, userController.editUserDetails)
-
-// router.delete("/:id",checkAuth,restrictRoleTo(['ADMIN']),userController.deleteUser);
-
-
 module.exports = router;
