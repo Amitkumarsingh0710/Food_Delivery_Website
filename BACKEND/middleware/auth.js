@@ -6,8 +6,8 @@ require('dotenv').config();
 
 async function checkAuth(req, res, next) {
     let token = req.cookies.token;
-    console.log("Token ............");
-    console.log(token);
+    // console.log("Token ............");
+    // console.log(token);
     if (!token) {
         return res.status(401).json({ status:"Fail",message: "Token expired!" })
     }

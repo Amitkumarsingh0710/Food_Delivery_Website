@@ -36,7 +36,7 @@ exports.createUser = async (req, res,next) => {
             const hash = await bcrypt.hash(req.body.password, salt);
             const newUser = await User.create({
                 ...req.body,
-                dateofBirth: new Date(req.body.dob),
+                dateofBirth: new Date(req.body.dateofBirth),
                 password: hash,
                 address: newAddress._id
             })
@@ -69,17 +69,15 @@ exports.loginHandler = async (req, res) => {
                     if (result) {
                         let token = generateAccessToken(user);
                         let refreshToken = generateRefreshToken(user);
-                        // console.log("Access Token:", token);
-                        // console.log("Refresh Token:", refreshToken);
                         res.cookie("token", token, {
-                            // httpOnly: true,
-                            // secure: true,
+                            httpOnly: process.NODE_ENV === 'production',
+                            secure: process.NODE_ENV === 'production',
                             sameSite: "Strict",
                             maxAge: 40 * 60 * 1000
                         });
                         res.cookie("refreshToken", refreshToken, {
-                            // httpOnly: true,
-                            // secure: true,
+                            httpOnly: process.NODE_ENV === 'production',
+                            secure: process.NODE_ENV === 'production',
                             sameSite: "Strict",
                             maxAge: 24 * 60 * 60 * 1000
                         });
@@ -105,6 +103,8 @@ exports.loginHandler = async (req, res) => {
 
 exports.refreshTokenHandler = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
+    console.log("Inside Refresh Token .....");
+    console.log(refreshToken);
     if (!refreshToken) return res.sendStatus(401);
     try {
         let decode = jwt.verify(refreshToken, process.env.REFRESH_TOKEN);
@@ -126,8 +126,8 @@ exports.refreshTokenHandler = async (req, res) => {
 }
 
 exports.logoutHandler = async (req, res) => {
-    console.log("Logout handler:");
-    console.log(req.user);
+    // console.log("Logout handler:");
+    // console.log(req.user);
     let expirationDate = req.user.exp * 1000;
 
     let Jti = await JTI.create({
@@ -151,17 +151,17 @@ exports.getProfileHandler = async (req ,res) => {
 
     // Find the user in the database
     const user = await User.findById(req.user.id).select('-password').populate('address');
-    console.log("User found in database:");
-    console.log(user);
+    // console.log("User found in database:");
+    // console.log(user);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json(new ApiError("User not found!",null,404));
     }
 
     // Return the user profile
     res.status(200).json(new ApiResponse("User Profile Fetched Successfully...", user,200));
   } catch (err) {
     console.error(err);
-    res.status(401).json({ message: 'Invalid or expired token' });
+    res.status(401).json(new ApiError("Invalid or expired token",null,401,[err.message]));  
   }
 };
 

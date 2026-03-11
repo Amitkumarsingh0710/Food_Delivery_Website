@@ -7,7 +7,7 @@ const {checkAuth,restrictRoleTo} = require('../middleware/auth');
 router.post('/createOrder/:userId',checkAuth,restrictRoleTo(['USER']),orderController.placeOrder);
 
 // 2. GET - View specific order (Note: userID is used for security check)
-router.get('/:userID',checkAuth,restrictRoleTo(['USER']),orderController.getOrderByUserId);
+router.get('/:userId',checkAuth,restrictRoleTo(['USER']),orderController.getOrderByUserId);
 
 // 3. GET - List all orders 
 router.get('/',checkAuth,restrictRoleTo(['HOTEL-MANAGER','ADMIN']),orderController.getAllOrders);

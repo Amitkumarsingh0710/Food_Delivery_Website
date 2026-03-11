@@ -36,9 +36,7 @@ exports.placeOrder = async (req, res) => {
 
     console.log("Formatted Items ......");
     console.log(formattedItems);
-    // let totalAmount = selectedItem.reduce((total, item, index) => {
-    //   return total += item.price * quantity[index];
-    // }, 0);
+   
 
     console.log(totalAmount);
 
@@ -63,8 +61,8 @@ exports.placeOrder = async (req, res) => {
 exports.getOrderByUserId = async (req, res) => {
   try {
     const order = await Order.find({
-      userId: req.params.userID
-    }).populate('items.itemId');
+      userId: req.params.userId
+    }).populate('items.itemId').populate('agentAssigned');
 
     if (!order || order.length === 0) return res.status(404).json({ message: "Order not found" });
     res.status(200).json({ message : "Order Feteched" , data : order });
@@ -105,7 +103,8 @@ exports.getAllOrders = async (req, res) => {
         },
         data: orders
       });
-    } else {
+    } 
+    else {
       const orders = await Order.find({ status: status })
         .sort({ [sortBy]: order })
         .skip(skip)
@@ -128,7 +127,6 @@ exports.getAllOrders = async (req, res) => {
         data: orders
       });
     }
-
 
   } catch (err) {
     res.status(500).json({ message: err.message });

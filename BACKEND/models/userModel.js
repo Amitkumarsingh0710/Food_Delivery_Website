@@ -34,7 +34,8 @@ const userSchema = new mongoose.Schema({
     select: false
   },
   dateofBirth: {
-    type: Date
+    type: Date,
+    required:true
   },
   phoneNumber: {
     type: String,

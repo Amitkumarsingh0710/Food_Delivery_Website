@@ -26,45 +26,57 @@ exports.getUserById = async (req, res) => {
 
 }
 
+exports.editSpecificDetails = async (req, res, next) => {
+    try {
+        const { email, address, status, username, phoneNumber } = req.body;
+        console.log("Address...");
+        console.log(address);
+        const user = await User.findById(req.params.id);
 
-exports.editSpecificDetails = async (req, res,next) => {
-    console.log("Inside the editSpecificDetails controller...");    
-    console.log("Request Body:", req.body);
-    console.log("User ID from Request Params:", req.params.id);
-    console.log("Authenticated User ID:", req.user.id);
-    try{
-        let { email, address, status } = req.body;
-    let user = await User.findById(req.params.id);
-    console.log("User fetched from DB:", user);
-    if (req.user.id !== req.params.id) {
-        return res.status(403).json({ message: "Unauthorized to Access" })
-    }
-   if (user.address) {
-    console.log("User has an address. Attempting to delete the existing address...");   
-    console.log("Existing Address ID:", user.address._id);
-     let deletedAddress = await Addresses.findByIdAndDelete(user.address._id,{new:true});
-     console.log("Deleted Address:", deletedAddress);
-    };
+        if (!user) return res.status(404).json({ message: "User not found" });
 
+        if (String(req.user.id) !== String(req.params.id)) {
+            return res.status(403).json({ message: "Unauthorized to Access" });
+        }
 
-    if (!email && !address && status) {
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, { $set: { status: status } }, { new: true, runValidators: true });
-        return res.status(200).json({ message: "User status updated Successfully...", updatedData: updatedUser });
-    }
-    else {
-        let updatedAddress = await Addresses.create(address);
-        if (!email) return res.status(400).json("Email is missing");
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, { $set: { username: req.body.username, phoneNumber:req.body.phoneNumber, email: email,address: updatedAddress._id } }, { new: true, runValidators: true });
-        console.log("Updated User:", updatedUser);
-        return res.status(200).json({ message: "User email-id and address updated Successfully...", updatedData: updatedUser });
-    }
+        // Delete old address if present
+        if (user.address) {
+            console.log("Delete old address if present")
+            await Addresses.findByIdAndDelete(user.address._id);
+        }
 
+        // Case 1: Only status update
+        if (!email && !address && status) {
+            const updatedUser = await User.findByIdAndUpdate(
+                req.params.id,
+                { $set: { status } },
+                { new: true, runValidators: true }
+            );
+            return res.status(200).json({ message: "User status updated successfully", updatedData: updatedUser });
+        }
+
+        // Case 2: Email + Address update
+        if (!email) return res.status(400).json({ message: "Email is missing" });
+
+        let updatedAddress = null;
+        if (address) {
+            console.log("Address found...");
+            updatedAddress = await Addresses.create(address);
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            { $set: { username, phoneNumber, email, address: updatedAddress?._id } },
+            { new: true, runValidators: true }
+        );
+
+        return res.status(200).json({ message: "User details updated successfully", updatedData: updatedUser });
+
+    } catch (err) {
+        next(new ApiError("Error occurred during User Profile Update", null, 500, [err.message], err.stack));
     }
-    catch(err){
-        return  new ApiError("Error Ocurred during User Profile Update",null,500,[err.message],err.stack);
-        next(err);
-    }
-}
+};
+
 
 
 

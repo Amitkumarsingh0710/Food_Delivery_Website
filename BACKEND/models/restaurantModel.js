@@ -69,7 +69,10 @@ const RestaurantSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Menu'
         }
-    ]
+    ],
+    restaurantImage:{
+         type: String,
+    }
 }, { timestamps: true });
 
 const Restaurant = mongoose.model('Restaurant', RestaurantSchema);

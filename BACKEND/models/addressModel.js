@@ -1,11 +1,9 @@
 const mongoose = require('mongoose');
-const validator = require('validator'); 
-
 const addressSchema = new mongoose.Schema({
   flatNo: {
     type: String,
     trim: true,
-    maxlength: [10, "Flat number cannot exceed 10 characters"]
+    maxlength: [40, "Flat number cannot exceed 10 characters"]
   },
   landmark: {
     type: String,
@@ -38,12 +36,6 @@ const addressSchema = new mongoose.Schema({
     required: [true, "Zip code is required"],
     match: [/^\d{6}$/, "Zip code must be exactly 6 digits"]
   },
-  // country: {
-  //   type: String,
-  //   required: [true, "Country is required"],
-  //   trim: true,
-  //   match: [/^[a-zA-Z\s]+$/, "Country name must contain only letters"]
-  // }
 });
 
 const Addresses = mongoose.model('Address', addressSchema);

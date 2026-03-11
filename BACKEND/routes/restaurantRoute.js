@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const restaurantController = require('../controllers/restaurantController');
 const {checkAuth,restrictRoleTo} = require('../middleware/auth');
+const uploadMiddleware = require('../utils/multerConfig');
 
-router.post('/createRestaurant',checkAuth,restrictRoleTo(['HOTEL-MANAGER']),restaurantController.createRestaurant);
+router.post('/createRestaurant',uploadMiddleware,checkAuth,restrictRoleTo(['HOTEL-MANAGER']),restaurantController.createRestaurant);
 
 // router.patch('/edit/:resId',checkAuth,restrictRoleTo(['HOTEL-MANAGER']),restaurantController.editRestaurantDetails);
 

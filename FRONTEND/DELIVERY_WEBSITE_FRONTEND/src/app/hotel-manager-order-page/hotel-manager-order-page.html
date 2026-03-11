@@ -1,0 +1,154 @@
+ <!-- <div class="manager-container">
+  <h2>Hotel Manager Panel</h2>
+ 
+  <div class="controls">
+    <label for="statusFilter">Filter by Status:</label>
+    <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="filterOrders()">
+      <option value="All">All</option>
+      <option value="Pending">Pending</option>
+      <option value="Delivery in progress">Delivery in Progress</option>
+      <option value="Delivered">Delivered</option>
+      <option value="Cancelled With refund">Cancelled With refund</option>
+    </select>
+  </div>
+ 
+  <table class="order-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Items</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Countdown / ETA</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of filteredOrders">
+        <td>{{ order.orderId }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let item of order.itemsName">{{ item }}</li>
+          </ul>
+        </td>
+        <td>{{ order.totalPrice }} Rs.</td>
+        <td [ngClass]="{'status-delivery': order.status === 'Delivery in progress'}">
+          {{ order.status }}
+        </td>
+       
+        <td class="timer-display">
+          <strong>{{ order['displayTimer'] }}</strong>
+        </td>
+ 
+        <td>
+          <input
+            type="datetime-local"
+            [(ngModel)]="order.eta"
+            [disabled]="order.status==='Pending'|| order.status === 'Delivery in progress' || order.status === 'Delivered' || order.status === 'Cancelled With refund'"
+            [min]="todayDate + 'T00:00'"
+            [max]="todayDate + 'T23:59'"
+          />
+         
+          <button
+            class="action-btn start"
+            [disabled]="order.status === 'Delivery in progress' || order.status === 'Delivered' || order.status === 'Cancelled With refund' || !order.eta"
+            (click)="handleSetDeliveryInProgress(order.orderId, order.eta || '', 'Delivery in progress')">
+             Start Delivery
+          </button>
+ 
+          <button
+            class="action-btn cancelled"
+            [disabled]="order.status === 'Pending'||order.status === 'Delivered' || order.status === 'Cancelled With refund'"
+            (click)="handleSetDeliveryInProgress(order.orderId, order.eta || '', 'Cancelled With refund')">
+            Cancelled With refund
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>  -->
+
+
+
+ <div class="manager-container">
+  <h2>Hotel Manager Panel</h2>
+
+  <div class="controls">
+    <label for="statusFilter">Filter by Status:</label>
+    <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="filterOrders()">
+      <option value="All">All</option>
+      <option value="Pending">Pending</option>
+      <option value="Delivery in progress">Delivery in Progress</option>
+      <option value="Delivered">Delivered</option>
+      <option value="Cancelled With refund">Cancelled With refund</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+  </div>
+
+  <table class="order-table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Items</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Countdown / ETA</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of filteredOrders">
+        <td>{{ order.orderId }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let item of order.itemsName">{{ item }}</li>
+          </ul>
+        </td>
+        <td>{{ order.totalPrice }} Rs.</td>
+
+        <td [ngClass]="{
+            'status-delivery': order.status === 'Delivery in progress',
+            'status-rejected': order.status === 'Rejected'
+        }">
+          {{ order.status }}
+        </td>
+
+        <td class="timer-display">
+          <strong>{{ order['displayTimer'] }}</strong>
+        </td>
+
+        <td>
+          
+          <input
+            *ngIf="order.status !== 'Rejected'"
+            type="datetime-local"
+            [(ngModel)]="order.eta"
+            [disabled]="order.status === 'Pending' || order.status === 'Delivery in progress' || order.status === 'Delivered' || order.status === 'Cancelled With refund'"
+            [min]="todayDate + 'T00:00'"
+            [max]="todayDate + 'T23:59'"
+          />
+
+          <button
+            *ngIf="order.status !== 'Rejected'"
+            class="action-btn start"
+            [disabled]="order.status === 'Delivery in progress' || order.status === 'Delivered' || order.status === 'Cancelled With refund' || !order.eta"
+            (click)="handleSetDeliveryInProgress(order.orderId, order.eta || '', 'Delivery in progress')">
+            Start Delivery
+          </button>
+
+          <span *ngIf="order.status === 'Rejected'" style="color: red; font-weight: bold; margin-right: 8px;">
+            ⛔ Agent Unavailable
+          </span>
+
+          <button
+            class="action-btn cancelled"
+            [disabled]="order.status === 'Pending' || order.status === 'Delivered' || order.status === 'Cancelled With refund'"
+            (click)="handleSetDeliveryInProgress(order.orderId, order.eta || '', 'Cancelled With refund')">
+            Cancelled With refund
+          </button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div> 

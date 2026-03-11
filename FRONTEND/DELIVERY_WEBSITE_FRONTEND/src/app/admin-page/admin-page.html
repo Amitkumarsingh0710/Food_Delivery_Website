@@ -1,0 +1,61 @@
+<h1>Admin Panel</h1>
+
+  <label for="statusFilter">Filter by Status:</label>
+
+  <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="filterOrders()">
+    <option value="All">All</option>
+    <option value="Pending">Pending</option>
+    <option value="Accepted">Accepted</option>
+    <option value="Delivery in progress" >Delivery in Progress</option>
+    <option value="Delivered">Delivered</option>
+    <option value="Rejected">Rejected</option>
+    <option value="Cancelled With refund"></option>
+  </select>
+ 
+<table class="orders-table">
+  <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>Status</th>
+      <th>Assigned Agent</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of Orders">
+      <td>{{ order.orderId }}</td>
+      <td>{{ order.status }}</td>
+      <td>
+        <select
+          [disabled]="order.status === 'Delivered' || order.status === 'Accepted' ||order.status === 'Rejected' || order.status ==='Cancelled With refund'"
+          [(ngModel)]="selectedAgentsMap[order.orderId]">
+          <!-- <option [ngValue]="null" disabled selected>Select Agent</option> -->
+          <option *ngFor="let agent of agents" [ngValue]="agent">
+            {{ agent.name }}
+          </option>
+        </select>
+        <p>Agent-Name {{order.assignedAgent?.name}}</p>
+      </td>
+      <td>
+        <div class="action-buttons">
+          <button
+            class="btn accept"
+            [disabled]="!isAnyAgentAvailable"
+            [ngClass]="{'btn-disabled': !isAnyAgentAvailable || !selectedAgentsMap[order.orderId]}"
+            [disabled]="!isAnyAgentAvailable || !selectedAgentsMap[order.orderId] || order.status === 'Delivered' || order.status ==='Cancelled With refund'|| order.status === 'Accepted' "
+            (click)="handleAccept(order.orderId)">
+            Accept
+          </button>
+ 
+          <button
+            class="btn reject"
+            [ngClass]="{'reject-disabled': order.status === 'Accepted', 'btn-disabled': isAnyAgentAvailable || order.status === 'Delivered' ||order.status === 'Accepted' || order.status === 'Rejected' || order.status === 'Cancelled With refund'}"
+            [disabled]="isAnyAgentAvailable || order.status === 'Delivered' ||order.status === 'Accepted'"
+            (click)="changeStatus(order.orderId, 'Rejected')">
+            Reject
+          </button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

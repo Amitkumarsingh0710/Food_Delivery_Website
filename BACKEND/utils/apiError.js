@@ -14,8 +14,6 @@ class ApiError extends Error {
       Error.captureStackTrace(this, this.constructor);
     }
 
-    // Name the error class for clarity
-    this.name = this.constructor.name;
   }
 
   // Convert to JSON for API responses

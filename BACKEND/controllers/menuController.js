@@ -6,16 +6,17 @@ const mongoose = require('mongoose');
 
 exports.createMenu = async (req, res) => {
   try {
-    const { name, price, description, sectionName } = req.body;
-
+    const { itemName, price, description, sectionName } = req.body;
+    console.log(req.body);
     let imagePath = null;
+    console.log(req.file.path);
     if (req.file) {
       imagePath = req.file.path.replace(/\\/g, "/");
     }
 
     // Step 1: Create a new item
     const newItem = await Item.create({
-      itemName: name,
+      itemName: itemName,
       price,
       description,
       imagePath,
@@ -167,10 +168,9 @@ exports.getMenuItems = async (req, res) => {
   }
 }
 
-
 exports.deleteMenuItem = async (req, res) => {
   console.log("Menu Item ID from params:", req.params.itemId);
-  console.log("Section Name from params:", req.params.sectionName);
+  console.log("Menu Id  from params:", req.params.menuId);
   
   let item = await Item.findById(req.params.itemId);
 
@@ -182,10 +182,10 @@ exports.deleteMenuItem = async (req, res) => {
   // console.log("Menu Item to be deleted ...");
   // console.log(menuItem);
 
-  let menu = await Menu.findOne({ SectionName: req.params.sectionName }).populate('items');
-  // console.log(menu);
+  // let menu = await Menu.findOne({ SectionName: req.params.sectionName }).populate('items');
+  // // console.log(menu);
 
-  let updatedMenu = await Menu.updateOne({ _id: menu._id }, { $pull: { items: req.params.itemId } });
+  let updatedMenu = await Menu.updateOne({ _id: req.params.menuId }, { $pull: { items: req.params.itemId } });
   console.log(updatedMenu);
 
   return res.status(200).json({ message: "Menu item deleted Successfully...", data: menuItem });

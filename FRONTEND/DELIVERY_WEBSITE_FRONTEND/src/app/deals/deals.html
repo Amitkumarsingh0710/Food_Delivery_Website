@@ -1,0 +1,31 @@
+<div class="deals-wrapper">
+  <div class="deals-header">
+    <h1 class="deals-title">Up to -40% 🎊 Order.uk exclusive deals</h1>
+    
+    <nav class="category-tabs">
+      @for (cat of categories; track cat) {
+        <button 
+          (click)="setCategory(cat)"
+          [class.active]="selectedCategory === cat">
+          {{ cat }}
+        </button>
+      }
+    </nav>
+  </div>
+
+  <div class="restaurant-grid">
+    @for (res of filteredRestaurants; track res.name) {
+      <div class="restaurant-card">
+        <div class="img-container" [style.background-image]="'url(' + res.image + ')'">
+          <div class="discount-badge">{{ res.discount }}</div>
+          <div class="content-overlay">
+            <span class="label">Restaurant</span>
+            <h2 class="res-name">{{ res.name }}</h2>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <p>No deals found for this category.</p>
+    }
+  </div>
+</div>

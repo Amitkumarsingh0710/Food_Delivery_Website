@@ -1,0 +1,68 @@
+<div class="payment-container">
+  <h2>Payment Page</h2>
+  <div class="total-section">
+    <h3>Total Amount: ₹{{ totalAmount }}</h3>
+  </div>
+
+  <form class="payment-form" #cardForm="ngForm" (ngSubmit)="makePayment(cardForm)">
+    <label for="cardNumber">Card Number:</label>
+    <input
+      id="cardNumber"
+      name="cardNumber"
+      type="text"
+      ngModel
+      placeholder="1234 5678 9012 1234"
+      required
+      card-Number
+    />
+    <div
+      class="error"
+      *ngIf="
+        cardForm.controls['cardNumber']?.invalid &&
+        cardForm.controls['cardNumber']?.touched &&
+        cardForm.controls['cardNumber']?.touched &&
+        cardForm.controls['cardNumber']?.errors?.['invalidCardNumber']
+      "
+    >
+      Invalid Card Number
+    </div>
+
+    <label for="expiry">Expiry Date:</label>
+    <div style="position: relative">
+      <input
+        name="expiry"
+        id="expiryDisplay"
+        type="text"
+        [value]="displayExpiry"
+        placeholder="MM/YY"
+        readonly
+        required
+        (click)="picker.showPicker()"
+        style="cursor: pointer; width: 100%"
+      />
+
+      <input
+        name="date"
+        #picker
+        type="date"
+        [min]="minDate"
+        (change)="onDateChange($event)"
+        style="visibility: hidden; position: absolute; bottom: 0; left: 0"
+      />
+    </div>
+    <label for="cvv">CVV:</label>
+    <input id="cvv" name="cvv" type="password" ngModel placeholder="***" required cvv-Number />
+    <div
+      class="error"
+      *ngIf="
+        cardForm.controls['cvv']?.invalid &&
+        cardForm.controls['cvv']?.touched &&
+        cardForm.controls['cvv']?.errors?.['invalidCvv']
+      "
+    >
+      Invalid CVV
+    </div>
+
+    <button type="submit" [disabled]="cardForm.invalid || !displayExpiry">Pay Now</button>
+  </form>
+</div>

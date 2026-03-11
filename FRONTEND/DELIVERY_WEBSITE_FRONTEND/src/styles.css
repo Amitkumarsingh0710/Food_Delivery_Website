@@ -1,0 +1,122 @@
+
+:root {
+  --primary: #fc8a06; /* Order.uk Orange */
+  --secondary: #03081f; /* Deep Blue/Black */
+  --bg-light: #fbfbfb;
+  --gray-text: #838383;
+  --footer-bg-light: #e8e8e8;
+  --footer-bg-dark: #03081f; /* Dark blue from bottom section */
+  --footer-accent: #fc8a06; /* Orange button color */
+  --bg-light: #f3f3f3; /* Accurate light gray background */
+  --bg-dark: #03081f; /* Deep navy/black footer */
+  --accent-orange: #fc8a06; /* The specific orange from the image */
+  --text-dark: #202020;
+  --white: #ffffff;
+  --text-gray: #555555;
+    --primary: #fc8a06;
+  --secondary: #03081f;
+  --bg-light: #fbfbfb;
+  --text-dark: #202020;
+}
+
+/* Global Reset */
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.home-wrapper {
+  background: var(--bg-light);
+  padding-bottom: 50px;
+}
+
+/* --- TOP BAR --- */
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background: #fafafa;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 13px;
+  border-radius: 0 0 12px 12px;
+}
+.highlight {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.cart-btn-header {
+  display: flex;
+  align-items: center;
+  background: #028643;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.cart-icon-box {
+  padding: 8px 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+.cart-price {
+  padding: 8px 12px;
+  font-weight: 600;
+}
+.cart-arrow {
+  padding: 8px 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* --- NAVBAR --- */
+.main-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: white;
+  margin-top: 5px;
+}
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--secondary);
+}
+.orange {
+  color: var(--primary);
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  padding: 0;
+}
+.nav-links a {
+  text-decoration: none;
+  color: var(--secondary);
+  font-weight: 500;
+  font-size: 15px;
+  transition: color 0.3s;
+}
+.nav-links a.active,
+.nav-links a:hover {
+  background: var(--primary);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 25px;
+}
+
+.btn-login {
+  background: var(--secondary);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

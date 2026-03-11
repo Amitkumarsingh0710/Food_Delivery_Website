@@ -30,25 +30,25 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const connectDb = require('./db/dbConnection');
 
+const path = require('path');
 const cors = require('cors');
-app.use(cors({
-  origin: 'http://localhost:4200', // Replace with your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE',"PATCH"], // Allowed HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-  credentials: true, // Allow cookies to be sent with requests
-}));  
 
-// MiddleWares (To Parse the data send from the Frontend) =======>
-// Convert the req body into Json format    
+// Configure CORS: allow frontend origin from env or default to Angular dev server
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:4200';
+app.use(cors({
+  origin: FRONTEND_ORIGIN,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}));
+
+// MiddleWares (To Parse the data send from the Frontend) =======>  
 app.use(express.json());
 
 // Serve static files from uploads folder
 app.use('/uploads', express.static('uploads'));
 
 // DB CONNECTION ==========>
-// mongoose.connect(process.env.Mongo_LOCAL_URL)
-//   .then(() => console.log("Mongodb Connected!"))
-//   .catch(err => console.log(err));
 connectDb();
 
 
@@ -61,31 +61,12 @@ app.use('/restaurant',restaurantRouter);
 app.use('/order',orderRouter);
 app.use('/admin',adminRouter);
 
-// app.all('*',(req,res)=>{
-//     console.log(req);
-// })
-
 app.use(errorHandler);
 
-// // Socket.IO connection
-// io.on('connection', (socket) => {
-//   console.log('Client connected:', socket.id);
+const PORT = process.env.PORT || 8000;
 
-//   socket.on('disconnect', () => {
-//     console.log('Client disconnected:', socket.id);
-//   });
-// });
-
-// Export io so controllers can emit events
-// module.exports = { app, server, io };
-
-// Now both Express routes and Socket.IO share the same server
-// server.listen(process.env.PORT, () => {
-//   console.log(`Server is listening at http://localhost:${process.env.PORT}`);
-// });
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server is listening at http://localhost:${process.env.PORT}` )
+app.listen(PORT, () => {
+  console.log(`Server is listening at http://localhost:${PORT}`)
 });
 
 

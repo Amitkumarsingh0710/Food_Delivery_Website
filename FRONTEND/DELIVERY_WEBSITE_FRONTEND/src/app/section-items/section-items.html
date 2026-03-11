@@ -1,0 +1,41 @@
+<div class="category-container">
+  <div class="category-header">
+    <h2>Explore Our {{ sectionName }}</h2>
+    <div class="search-wrapper">
+      <input 
+        type="text" 
+        placeholder="Search {{ sectionName }}..." 
+        [(ngModel)]="searchTerm" 
+        (ngModelChange)="onSearchChange()" 
+        class="search-bar"
+      />
+    </div>
+  </div>
+
+  <div class="menu-grid">
+    <div *ngFor="let item of menuItems" class="menu-card">
+      <div class="image-box">
+        <img [src]="item.imagePath || item.image || item.imgurl" alt="{{ item.name || item.itemName }}" class="item-image" />
+      </div>
+
+      <div class="card-content">
+        <div class="card-title-row">
+          <h3>{{ item.name || item.itemName }}</h3>
+          <span class="price-tag">₹{{ item.price }}</span>
+        </div>
+        
+        <p class="description">{{ item.description || item.desc }}</p>
+        <div class="menu-actions">
+          <div class="owner-group" *ngIf="currentUser?.role === 'resOwner'">
+            <button class="btn-edit" (click)="handleEdit(item.itemId)">Edit</button> 
+            <button class="btn-delete" (click)="handleDelete(item.itemId, sectionName)">Delete</button>
+          </div>
+          
+          <button class="btn-add" *ngIf="currentUser?.role === 'user' || !currentUser"  (click)="handleAddToCart(item.itemId, sectionName)">
+            Add To Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

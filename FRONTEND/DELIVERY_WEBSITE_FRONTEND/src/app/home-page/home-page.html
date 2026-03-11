@@ -1,0 +1,234 @@
+<header class="hero-banner">
+  <div class="hero-text">
+    <p class="sub-heading">Order Restaurant food, takeaway and groceries.</p>
+    <h1>Feast Your Senses,<br><span class="orange">Fast and Fresh</span></h1>
+    
+   
+  </div>
+
+  <div class="hero-visuals">
+    <img src="assets/orangebg.png" alt="Background Shape" class="bg-curve">
+    
+    <div class="img-card secondary">
+      <img src="assets/eatingcustomer.png" alt="Enjoying food">
+    </div>
+
+    <div class="img-card main">
+      <img src="assets/happycustomer.png" alt="Happy Customer">
+    </div>
+    
+    <div class="float-card c1">
+        <div class="float-header"><span>Order.uk</span> <small>now</small></div>
+        <p>We've Received your order!</p>
+    </div>
+    <div class="float-card c2">
+        <div class="float-header"><span>Order.uk</span> <small>now</small></div>
+        <p>Order Accepted! ✅</p>
+    </div>
+    <div class="float-card c3">
+        <div class="float-header"><span>Order.uk</span> <small>now</small></div>
+        <p>Your rider's nearby 🎉</p>
+    </div>
+  </div>
+</header>
+
+
+<section class="categories-area" id="categories-area">
+  <h2>LunchBox Popular Categories 🤩</h2>
+  
+  <div class="cat-grid">
+    <div *ngFor="let section of menuSections" 
+         class="cat-card" 
+         (click)="navigateToSection(section.sectionName)">
+      
+      <div class="cat-img-box">
+        <img [src]="section.imgurl" [alt]="section.sectionName">
+      </div>
+      
+      <div class="cat-info">
+        <h3>{{ section.sectionName }}</h3>
+        <span class="count-text">20+ Options</span> 
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="logo-strip-section">
+  <div class="logo-slider">
+    <div class="logo-track">
+      <div class="logo-slide"><img src="assets\logo\McDonalds-Logo.png" alt="McDonald's"></div>
+      <div class="logo-slide"><img src="assets\logo\PAPA.jpg" alt="Papa Johns"></div>
+      <div class="logo-slide"><img src="assets\logo\image.png" alt="KFC"></div>
+      <div class="logo-slide"><img src="assets\logo\subway.png" alt="Subway"></div>
+      <div class="logo-slide"><img src="assets\logo\burger.png" alt="Burger King"></div>
+      
+        <div class="logo-slide"><img src="assets\logo\McDonalds-Logo.png" alt="McDonald's"></div>
+      <div class="logo-slide"><img src="assets\logo\PAPA.jpg" alt="Papa Johns"></div>
+      <div class="logo-slide"><img src="assets\logo\image.png" alt="KFC"></div>
+      <div class="logo-slide"><img src="assets\logo\subway.png" alt="Subway"></div>
+      <div class="logo-slide"><img src="assets\logo\burger.png" alt="Burger King"></div>
+      
+    </div>
+  </div>
+</section>
+
+
+<!-- <app-deals></app-deals> -->
+
+<app-promo></app-promo>
+
+
+<section class="info-section">
+  <div class="info-header">
+    <h2>Know more about us!</h2>
+    
+    <div class="info-nav">
+      <button 
+        [class.active]="selectedInfoTab === 'faq'" 
+        (click)="selectedInfoTab = 'faq'">
+        Frequent Questions
+      </button>
+      <button 
+        [class.active]="selectedInfoTab === 'who'" 
+        (click)="selectedInfoTab = 'who'">
+        Who we are?
+      </button>
+      <button 
+        [class.active]="selectedInfoTab === 'partner'" 
+        (click)="selectedInfoTab = 'partner'">
+        Partner Program
+      </button>
+      <button 
+        [class.active]="selectedInfoTab === 'help'" 
+        (click)="selectedInfoTab = 'help'">
+        Help & Support
+      </button>
+    </div>
+  </div>
+
+  <div class="info-content-box" [ngSwitch]="selectedInfoTab">
+
+    <div *ngSwitchCase="'faq'" class="tab-content faq-layout">
+      <div class="faq-questions">
+        <button 
+          *ngFor="let q of faqQuestions" 
+          [class.active]="selectedFaq === q"
+          (click)="selectedFaq = q">
+          {{ q.question }}
+        </button>
+      </div>
+
+      <div class="faq-answers">
+        <div class="process-steps">
+          <div class="step-card">
+             <h3>Place an Order!</h3>
+            <span class="step-icon">🔔</span>
+            <p>Place order through our website or Mobile app</p>
+          </div>
+          <div class="step-card">
+             <h3>Track Progress</h3>
+            <span class="step-icon">🍔</span>
+            <p>Your can track your order status with delivery time</p>
+          </div>
+          <div class="step-card">
+               <h3>Get your Order!</h3>
+            <span class="step-icon">📱</span>
+            <p>Receive your order at a lighting fast speed!</p>
+          </div>
+        </div>
+        
+        <div class="answer-text">
+          <p>{{ selectedFaq.answer }}</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngSwitchCase="'who'" class="tab-content simple-text">
+      
+      <p class="desktop-view"><span><h3>About Order.uk</h3></span>
+        <span>
+          <strong>
+            <i>You don't have to cook fancy or complicated masterpieces—just good food from fresh ingredients.” – Julia Child</i>
+          </strong>
+          <br><br>
+        </span>
+        We are a passionate team dedicated to connecting hungry foodies with the best local restaurants. 
+        Our mission is to make food delivery fast, fresh, and reliable, ensuring every meal is a delightful experience.
+         From our humble beginnings, we've grown into a trusted platform, fueled by technology and a love for great food.</p>
+         <p class="mobile-view">
+            <span><i>You don't have to cook fancy or complicated masterpieces—just good food from fresh ingredients.” – Julia Child</i>
+</span>
+         </p>
+         <img src="assets\harrison-chang-4iV-13w5kSo-unsplash.jpg" alt="">
+
+    </div>
+
+
+    <div *ngSwitchCase="'partner'" class="tab-content simple-text">
+      
+      <p>
+        <span><h3>Grow with Us!</h3></span>
+        Join the Order.uk family and expand your reach. Our partner program is designed for restaurants of all sizes, providing you with the tools, 
+        technology, and support to increase your orders and delight more customers. Let's build success together.
+        <br><br>
+      <span><button class="action-btn start" style="margin-top: 20px;">Apply Now</button></span>
+      </p>
+      <img src="assets\partner.avif" alt="">
+    </div>
+
+
+    <div *ngSwitchCase="'help'" class="tab-content simple-text">
+     
+      <p>
+        <span> <h3>We're Here to Help</h3></span>
+        Need assistance with an order? Have a question about your account? Our dedicated support team is available 24/7 to assist you. 
+        You can reach out to us via live chat, email, or check our comprehensive knowledge base for quick answers.
+      
+        <span>
+
+          <ul style="margin-top: 20px; list-style: none; padding: 0;">
+        <li>📞 <strong>Phone:</strong> +44 20 1234 5678</li>
+        <li>📧 <strong>Email:</strong> support@order.uk</li>
+      </ul>
+        </span>
+      
+      </p>
+
+      <img src="assets\help.avif" alt="">
+      
+    </div>
+
+  </div>
+</section>
+
+
+
+<section class="stats-container" #statsSection>
+  <div class="stat-box">
+    <div class="stat-number">{{ displayedRiders }}+</div>
+    <div class="stat-label">Registered Riders</div>
+  </div>
+  
+  <div class="divider"></div>
+
+  <div class="stat-box">
+    <div class="stat-number">{{ displayedOrders | number }}+</div>
+    <div class="stat-label">Orders Delivered</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="stat-box">
+    <div class="stat-number">{{ displayedRestaurants }}+</div>
+    <div class="stat-label">Restaurants Partnered</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="stat-box">
+    <div class="stat-number">{{ displayedItems | number }}+</div>
+    <div class="stat-label">Food items</div>
+  </div>
+</section>
